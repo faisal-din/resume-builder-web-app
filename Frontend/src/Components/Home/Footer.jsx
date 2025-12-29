@@ -97,11 +97,7 @@ const Footer = () => {
             audience.
           </p>
           <div className='flex items-center gap-4 mt-3'>
-            <a
-              href='https://dribbble.com/prebuiltui'
-              target='_blank'
-              rel='noreferrer'
-            >
+            <a href='https://dribbble.com' target='_blank' rel='noreferrer'>
               <svg
                 xmlns='http://www.w3.org/2000/svg'
                 width='24'
@@ -122,7 +118,7 @@ const Footer = () => {
               </svg>
             </a>
             <a
-              href='https://www.linkedin.com/'
+              href='https://www.linkedin.com/in/faisal-din56/'
               target='_blank'
               rel='noreferrer'
             >
