@@ -1,12 +1,12 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
+import Navbar from '../Components/Navbar';
 
 const LayoutPage = () => {
   return (
     <div>
-      <h1>Layout Page</h1>
-
-      <div>
+      <div className='min-h-screen bg-gray-50'>
+        <Navbar />
         <Outlet />
       </div>
     </div>
