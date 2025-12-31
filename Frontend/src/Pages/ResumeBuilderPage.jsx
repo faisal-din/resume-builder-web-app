@@ -16,6 +16,7 @@ import PersonalInfoForm from '../Components/PersonalInfoForm';
 import ResumePreview from '../Components/ResumePreview';
 import TemplateSelector from '../Components/TemplateSelector';
 import ColorPicker from '../Components/ColorPicker';
+import ProfessionalSummaryForm from '../Components/ProfessionalSummaryForm';
 
 const ResumeBuilderPage = () => {
   const { resumeId } = useParams();
@@ -42,7 +43,7 @@ const ResumeBuilderPage = () => {
     }
   };
 
-  const [activeSectionIndex, setActiveSectionIndex] = useState(0);
+  const [activeSectionIndex, setActiveSectionIndex] = useState(1);
   const [removeBackground, setRemoveBackground] = useState(false);
 
   const sections = [
@@ -114,6 +115,7 @@ from-green-500 to-green-600 border-none transition-all duration-2000'
                     }
                   />
                 </div>
+
                 <div className='flex items-center'>
                   {activeSectionIndex !== 0 && (
                     <button
@@ -134,7 +136,7 @@ transition-all'
                     className={`flex items-center gap-1 p-3 rounded-1g text-sm font-medium text-gray-600 hover:bg-gray-50 ${
                       activeSectionIndex === sections.length - 1 && 'opacity-50'
                     }`}
-                    disabled={activeSectionIndex === 0}
+                    disabled={activeSectionIndex === sections.length - 1}
                     onClick={() =>
                       setActiveSectionIndex((prevIndex) =>
                         Math.min(prevIndex + 1, sections.length - 1)
@@ -159,6 +161,19 @@ transition-all'
                     }
                     removeBackground={removeBackground}
                     setRemoveBackground={setRemoveBackground}
+                  />
+                )}
+
+                {activeSection.id === 'summary' && (
+                  <ProfessionalSummaryForm
+                    data={resumeData.professional_summary}
+                    onChange={(data) =>
+                      setResumeData((prev) => ({
+                        ...prev,
+                        professional_summary: data,
+                      }))
+                    }
+                    setResumeData={setResumeData}
                   />
                 )}
               </div>
