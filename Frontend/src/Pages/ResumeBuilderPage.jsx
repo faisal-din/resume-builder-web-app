@@ -17,6 +17,7 @@ import ResumePreview from '../Components/ResumePreview';
 import TemplateSelector from '../Components/TemplateSelector';
 import ColorPicker from '../Components/ColorPicker';
 import ProfessionalSummaryForm from '../Components/ProfessionalSummaryForm';
+import ExperienceForm from '../Components/ExperienceForm';
 
 const ResumeBuilderPage = () => {
   const { resumeId } = useParams();
@@ -176,6 +177,19 @@ transition-all'
                     setResumeData={setResumeData}
                   />
                 )}
+
+                {activeSection.id === 'experience' && (
+                  <ExperienceForm
+                    data={resumeData.experience}
+                    onChange={(data) =>
+                      setResumeData((prev) => ({
+                        ...prev,
+                        experience: data,
+                      }))
+                    }
+                  />
+                )}
+                {/* Additional sections like EducationForm, ProjectsForm, SkillsForm can be added here */}
               </div>
             </div>
           </div>
