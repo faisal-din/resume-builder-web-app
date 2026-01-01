@@ -19,6 +19,7 @@ import ColorPicker from '../Components/ColorPicker';
 import ProfessionalSummaryForm from '../Components/ProfessionalSummaryForm';
 import ExperienceForm from '../Components/ExperienceForm';
 import EducationForm from '../Components/EducationForm';
+import ProjectForm from '../Components/ProjectForm';
 
 const ResumeBuilderPage = () => {
   const { resumeId } = useParams();
@@ -30,7 +31,7 @@ const ResumeBuilderPage = () => {
     professional_summary: '',
     experience: [],
     education: [],
-    projects: [],
+    project: [],
     skills: [],
     template: 'classic',
     accent_color: '#3B82F6',
@@ -198,6 +199,18 @@ transition-all'
                       setResumeData((prev) => ({
                         ...prev,
                         education: data,
+                      }))
+                    }
+                  />
+                )}
+
+                {activeSection.id === 'projects' && (
+                  <ProjectForm
+                    data={resumeData.project}
+                    onChange={(data) =>
+                      setResumeData((prev) => ({
+                        ...prev,
+                        project: data,
                       }))
                     }
                   />
