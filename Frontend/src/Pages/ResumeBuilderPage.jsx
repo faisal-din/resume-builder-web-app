@@ -18,6 +18,7 @@ import TemplateSelector from '../Components/TemplateSelector';
 import ColorPicker from '../Components/ColorPicker';
 import ProfessionalSummaryForm from '../Components/ProfessionalSummaryForm';
 import ExperienceForm from '../Components/ExperienceForm';
+import EducationForm from '../Components/EducationForm';
 
 const ResumeBuilderPage = () => {
   const { resumeId } = useParams();
@@ -189,7 +190,20 @@ transition-all'
                     }
                   />
                 )}
-                {/* Additional sections like EducationForm, ProjectsForm, SkillsForm can be added here */}
+
+                {activeSection.id === 'education' && (
+                  <EducationForm
+                    data={resumeData.education}
+                    onChange={(data) =>
+                      setResumeData((prev) => ({
+                        ...prev,
+                        education: data,
+                      }))
+                    }
+                  />
+                )}
+
+                {/* Additional sections like SkillsForm can be added here */}
               </div>
             </div>
           </div>
