@@ -3,6 +3,7 @@ import cors from 'cors';
 import 'dotenv/config';
 import connectDB from './config/db.js';
 import userRouter from './routes/user.routes.js';
+import resumeRouter from './routes/resume.routes.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -20,6 +21,7 @@ app.get('/', (req, res) => {
 
 //  Routes
 app.use('/api/users', userRouter);
+app.use('/api/resumes', resumeRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
