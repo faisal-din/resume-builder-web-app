@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt';
 import UserModel from '../models/user.model.js';
 import jwt from 'jsonwebtoken';
 
-// Create JWT Token
+// Create JWT Token function
 const generateToken = (userId) => {
   const token = jwt.sign({ id: userId }, process.env.JWT_SECRET, {
     expiresIn: '7d',
@@ -10,6 +10,7 @@ const generateToken = (userId) => {
   return token;
 };
 
+// controller for user registration
 // POST /api/users/register
 export const registerUser = async (req, res) => {
   try {
@@ -56,6 +57,7 @@ export const registerUser = async (req, res) => {
   }
 };
 
+// controller for user login
 // POST /api/users/login
 export const loginUser = async (req, res) => {
   try {
@@ -88,6 +90,7 @@ export const loginUser = async (req, res) => {
   }
 };
 
+// controller for getting user data by ID
 // GET /api/users/data
 export const getUserById = (req, res) => {
   try {
@@ -112,5 +115,24 @@ export const getUserById = (req, res) => {
       message: 'Error fetching user by ID',
       error: error.message,
     });
+  }
+};
+
+// controller for getting user resumes
+// GET  /api/users/resumes
+export const getUserResumes = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    // return user resumes
+    const resumes = await ResumeModel.find({ userId });
+    res.status(200).json({
+      resumes,
+    });
+  } catch (error) {
+    console.log('Error rretrieving resumes:', error);
+    res
+      .status(500)
+      .json({ message: 'Error retrieving user resumes', error: error.message });
   }
 };
