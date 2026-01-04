@@ -14,13 +14,11 @@ const generateToken = (userId) => {
 // POST /api/users/register
 export const registerUser = async (req, res) => {
   try {
-    const { username, email, password } = req.body;
+    const { name, email, password } = req.body;
 
     // check if required fields are present
-    if (!username || !email || !password) {
-      return res
-        .status(400)
-        .json({ message: 'Please provide username, email and password' });
+    if (!name || !email || !password) {
+      return res.status(400).json({ message: 'Invalid Credentials...' });
     }
 
     // check if user already exists
@@ -32,7 +30,7 @@ export const registerUser = async (req, res) => {
     // create new user
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = new UserModel({
-      username,
+      name,
       email,
       password: hashedPassword,
     });
@@ -40,8 +38,6 @@ export const registerUser = async (req, res) => {
     // create JWT token for the user
     const token = generateToken(newUser._id);
     newUser.password = undefined; // hide password in response
-
-    await newUser.save();
 
     res.status(201).json({
       message: 'User registered successfully',

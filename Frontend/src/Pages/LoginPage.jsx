@@ -1,7 +1,12 @@
 import React from 'react';
 import { Mail, User2Icon, Lock } from 'lucide-react';
+import api from '../configs/api';
+import { useDispatch } from 'react-redux';
+import { login } from '../app/features/authSlice';
+import toast from 'react-hot-toast';
 
 const LoginPage = () => {
+  const dispatch = useDispatch();
   const queryParams = new URLSearchParams(window.location.search);
   const urlState = queryParams.get('state');
 
@@ -15,6 +20,15 @@ const LoginPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    try {
+      const { data } = await api.post(`/api/users/${state}`, formData);
+      dispatch(login(data));
+      localStorage.setItem('token', data.token);
+      toast.success(data.message);
+    } catch (error) {
+      toast.error(error?.response?.data?.message || error.message);
+      console.log('Error logging in: ', error?.response?.data || error.message);
+    }
   };
 
   const handleChange = (e) => {
@@ -79,7 +93,7 @@ const LoginPage = () => {
           type='submit'
           className='mt-2 w-full h-11 rounded-full text-white bg-green-500 hover:opacity-90 transition-opacity'
         >
-          {state === 'login' ? 'Login' : 'Sign up'}
+          {state === 'login' ? 'Login' : 'register'}
         </button>
         <p
           onClick={() =>
