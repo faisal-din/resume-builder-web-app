@@ -18,18 +18,20 @@ export const registerUser = async (req, res) => {
 
     // check if required fields are present
     if (!name || !email || !password) {
-      return res.status(400).json({ message: 'Invalid Credentials...' });
+      return res.status(400).json({
+        message: 'Please provide name, email and password',
+      });
     }
 
     // check if user already exists
-    const user = await UserModel.findOne({ email });
-    if (user) {
+    const existingUser = await UserModel.findOne({ email });
+    if (existingUser) {
       return res.status(400).json({ message: 'User already exists' });
     }
 
     // create new user
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new UserModel({
+    const newUser = await UserModel.create({
       name,
       email,
       password: hashedPassword,
@@ -62,11 +64,12 @@ export const loginUser = async (req, res) => {
     // check user exists
     const user = await UserModel.findOne({ email });
     if (!user) {
-      return res.status(400).json({ message: 'Invalid email or password' });
+      return res.status(400).json({ message: 'User not found' });
     }
 
     // check if password is correct
-    if (!user.comparePassword(password)) {
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
       return res.status(400).json({ message: 'Invalid email or password' });
     }
 
