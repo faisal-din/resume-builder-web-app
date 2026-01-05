@@ -63,7 +63,7 @@ export const deleteResume = async (req, res) => {
 // GET /api/resumes/get
 export const getResumeById = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.userId;
     const { resumeId } = req.params;
     if (!resumeId) {
       return res.status(400).json({ message: 'Resume ID is required' });

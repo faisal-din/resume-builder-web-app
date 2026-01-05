@@ -13,6 +13,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import api from '../configs/api';
 import toast from 'react-hot-toast';
+import pdfToText from 'react-pdftotext';
 
 const DashboardPage = () => {
   const { user, token } = useSelector((state) => state.auth);
@@ -26,6 +27,7 @@ const DashboardPage = () => {
   const [title, setTitle] = useState('');
   const [resume, setResume] = useState(null);
   const [editResumeId, setEditResumeId] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const loadAllResumes = async () => {
     setAllResumes(dummyResumeData);
@@ -56,8 +58,30 @@ const DashboardPage = () => {
 
   const uploadResume = async (e) => {
     e.preventDefault();
-    setShowUploadResume(false);
-    navigate(`/app/builder/res123`);
+    setIsLoading(true);
+
+    try {
+      const resumeText = await pdfToText(resume);
+      const { data } = await api.post(
+        '/api/ai/upload-resume',
+        { title, resumeText },
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+
+      setTitle('');
+      setResume(null);
+      setShowUploadResume(false);
+      navigate(`/app/builder/${data.resumeId}`);
+    } catch (error) {
+      toast.error(error?.response?.data?.message || 'Error uploading resume');
+      console.log('Error uploading resume: ', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const editResumeTitle = async (e) => {
