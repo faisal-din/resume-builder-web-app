@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
   FilePenLineIcon,
+  LoaderCircleIcon,
   PencilIcon,
   PlusIcon,
   TrashIcon,
@@ -30,7 +31,17 @@ const DashboardPage = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const loadAllResumes = async () => {
-    setAllResumes(dummyResumeData);
+    try {
+      const { data } = await api.get('/api/users/resumes', {
+        headers: {
+          Authorization: token,
+        },
+      });
+      setAllResumes(data.resumes);
+    } catch (error) {
+      toast.error(error?.response?.data?.message || 'Error loading resumes');
+      console.log('Error loading resumes: ', error.response.data);
+    }
   };
 
   const createResume = async (e) => {
@@ -85,20 +96,53 @@ const DashboardPage = () => {
   };
 
   const editResumeTitle = async (e) => {
-    e.preventDefault();
-    setEditResumeId('');
+    try {
+      e.preventDefault();
+      const { data } = await api.put(
+        `/api/resumes/update`,
+        { resumeId: editResumeId, resumeData: { title } },
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+      setAllResumes(
+        allResumes.map((resume) =>
+          resume._id === editResumeId
+            ? { ...resume, title: data.resume.title }
+            : resume
+        )
+      );
+      setTitle('');
+      setEditResumeId('');
+      toast.success(data.message);
+    } catch (error) {
+      toast.error(error?.response?.data?.message || 'Error updating title');
+      console.log('Error updating resume title: ', error.response);
+    }
   };
 
   const deleteResume = async (resumeId) => {
-    const confirmDelete = window.confirm(
-      'Are you sure you want to delete this resume? This action cannot be undone.'
-    );
-    if (confirmDelete) {
-      setAllResumes((prevResumes) =>
-        prevResumes.filter((resume) => resume._id !== resumeId)
+    try {
+      const confirm = window.confirm(
+        'Are you sure you want to delete this resume? This action cannot be undone.'
       );
+      if (confirm) {
+        const { data } = await api.delete(`/api/resumes/delete/${resumeId}`, {
+          headers: {
+            Authorization: token,
+          },
+        });
+        setAllResumes(allResumes.filter((res) => res._id !== resumeId));
+        toast.success(data.message);
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message || 'Error deleting resume');
+      console.log('Error deleting resume: ', error.response.data);
     }
   };
+
   useEffect(() => {
     loadAllResumes();
   }, []);
@@ -287,8 +331,14 @@ hover:text-slate-600 cursor-pointer transition-colors'
                 />
               </div>
 
-              <button className='w-full py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors'>
-                Upload Resume
+              <button
+                disabled={isLoading}
+                className='w-full py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors flex items-center justify-center gap-2'
+              >
+                {isLoading && (
+                  <LoaderCircleIcon className='animate-spin size-4 text-white' />
+                )}
+                {isLoading ? 'Uploading...' : 'Upload Resume'}
               </button>
 
               <XIcon

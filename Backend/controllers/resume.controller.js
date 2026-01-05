@@ -129,7 +129,7 @@ export const updateResume = async (req, res) => {
 
     const image = req.file;
 
-    const resumeDataCopy = JSON.parse(resumeData);
+    const resumeDataCopy = JSON.parse(JSON.stringify(resumeData));
 
     if (image) {
       const imageBufferData = fs.createReadStream(image.path);

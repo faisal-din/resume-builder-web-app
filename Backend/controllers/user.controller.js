@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
 import UserModel from '../models/user.model.js';
+import ResumeModel from '../models/resume.model.js';
 import jwt from 'jsonwebtoken';
 
 // Create JWT Token function
@@ -121,7 +122,7 @@ export const getUserById = async (req, res) => {
 // GET  /api/users/resumes
 export const getUserResumes = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.userId;
 
     // return user resumes
     const resumes = await ResumeModel.find({ userId });
