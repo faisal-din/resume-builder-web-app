@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { dummyResumeData } from '../assets/assets';
 import {
   ArrowLeftIcon,
   Briefcase,
@@ -38,7 +37,7 @@ const ResumeBuilderPage = () => {
     title: '',
     personal_info: {},
     professional_summary: '',
-    experience: [],
+    experiences: [],
     education: [],
     project: [],
     skills: [],
@@ -276,11 +275,11 @@ transition-all'
 
                 {activeSection.id === 'experience' && (
                   <ExperienceForm
-                    data={resumeData.experience}
+                    data={resumeData.experiences}
                     onChange={(data) =>
                       setResumeData((prev) => ({
                         ...prev,
-                        experience: data,
+                        experiences: data,
                       }))
                     }
                   />

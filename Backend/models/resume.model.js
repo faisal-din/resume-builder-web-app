@@ -43,7 +43,7 @@ const ResumeSchema = new mongoose.Schema(
     },
     experiences: [
       {
-        job_title: { type: String },
+        position: { type: String },
         company: { type: String },
         start_date: { type: String },
         end_date: { type: String },

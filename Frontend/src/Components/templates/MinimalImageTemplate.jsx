@@ -129,7 +129,7 @@ const MinimalImageTemplate = ({ data, accentColor }) => {
           )}
 
           {/* Experience */}
-          {data.experience && data.experience.length > 0 && (
+          {data.experiences && data.experiences.length > 0 && (
             <section>
               <h2
                 className='text-sm font-semibold tracking-widest mb-4'
@@ -138,7 +138,7 @@ const MinimalImageTemplate = ({ data, accentColor }) => {
                 EXPERIENCE
               </h2>
               <div className='space-y-6 mb-8'>
-                {data.experience.map((exp, index) => (
+                {data.experiences.map((exp, index) => (
                   <div key={index}>
                     <div className='flex justify-between items-center'>
                       <h3 className='font-semibold text-zinc-900'>
