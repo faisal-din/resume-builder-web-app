@@ -6,14 +6,14 @@ import fs from 'fs';
 // POST /api/resumes/create
 export const createResume = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.userId;
     const { title } = req.body;
     if (!title) {
       return res.status(400).json({ message: 'Title is required' });
     }
 
     // create a new resume
-    const newResume = new ResumeModel.create({
+    const newResume = await ResumeModel.create({
       userId,
       title,
     });

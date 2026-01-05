@@ -91,12 +91,12 @@ export const loginUser = async (req, res) => {
 
 // controller for getting user data by ID
 // GET /api/users/data
-export const getUserById = (req, res) => {
+export const getUserById = async (req, res) => {
   try {
     const userId = req.params.id;
 
     // check if user exists
-    const user = UserModel.findById(userId);
+    const user = await UserModel.findById(userId);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
