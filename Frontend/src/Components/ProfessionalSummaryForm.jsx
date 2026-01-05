@@ -1,7 +1,40 @@
-import { Sparkles } from 'lucide-react';
-import React from 'react';
+import { Loader2, Sparkles } from 'lucide-react';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import api from '../configs/api';
+import toast from 'react-hot-toast';
 
 const ProfessionalSummaryForm = ({ data, onChange, setResumeData }) => {
+  const { token } = useSelector((state) => state.auth);
+  const [isGenerating, setIsGenerating] = useState(false);
+
+  const generateAiSummary = async () => {
+    try {
+      setIsGenerating(true);
+      const prompt = `Generate a professional summary "${data}".`;
+      const response = await api.post(
+        '/api/ai/enhance-pro-summary',
+        { userContent: prompt },
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+      setResumeData((prev) => ({
+        ...prev,
+        professional_summary: response.data.enhancedSummary,
+      }));
+    } catch (error) {
+      toast.error(
+        error?.response?.data?.message || 'Failed to generate AI summary'
+      );
+      console.error('Error generating AI summary:', error);
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
   return (
     <div className='space-y-4'>
       <div className='flex items-center justify-between'>
@@ -15,11 +48,17 @@ const ProfessionalSummaryForm = ({ data, onChange, setResumeData }) => {
         </div>
 
         <button
+          disabled={isGenerating}
+          onClick={generateAiSummary}
           className='flex items-center gap-2 px-3 py-1 text-sm bg-purple-100 text-purple-700 rounded hover:bg-purple-200 transition-colors
 disabled:opacity-50'
         >
-          <Sparkles className='size-4' />
-          AI Enhance
+          {isGenerating ? (
+            <Loader2 className='size-4 animate-spin' />
+          ) : (
+            <Sparkles className='size-4' />
+          )}
+          {isGenerating ? 'Enhancing...' : 'AI Enhance'}
         </button>
       </div>
 
